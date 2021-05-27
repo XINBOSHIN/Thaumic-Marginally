@@ -1,0 +1,64 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+    }
+}
+
+apply plugin: 'forge'
+
+ext.buildnumber = 0
+if(System.getenv('BUILD_NUMBER') != null)
+    project.buildnumber = System.getenv('BUILD_NUMBER')
+
+version = "2-1.0_B${buildnumber}"
+group= "ThaumcraftExtras" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "ThaumcraftExtras"
+
+minecraft {
+    version = "1.7.10-10.13.2.1277"
+    assetDir = "eclipse/assets"
+}
+
+dependencies{
+	compile files(
+	'deps/TC4.jar',
+	'deps/WaslieCore.jar',
+	)
+}
+
+processResources
+{
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+                
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+task deps{
+	project.mkdir("deps")
+	def wsc = new File('deps/WaslieCore.jar')
+	new URL('https://dl.dropboxusercontent.com/u/46500170/Thaumcraft%20Extras%202/deps/WaslieCore.jar').withInputStream{ i -> wsc.withOutputStream{ it << i }}
+
+	def tc = new File('deps/TC4.jar')
+	new URL('https://dl.dropboxusercontent.com/u/46500170/Thaumcraft%20Extras%202/deps/TC4.jar').withInputStream{ i -> tc.withOutputStream{ it << i }}
+}
+build.dependsOn deps
