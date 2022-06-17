@@ -20,7 +20,7 @@ repositories {
 }
 
 version = "0.3.1"
-group = "com.mangoose.thaumicmarginally"
+group = "com.mangoose.thaumicmarginall"
 archivesBaseName = "thaumicmarginally"
 
 sourceCompatibility = targetCompatibility = '1.8'
