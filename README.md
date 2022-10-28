@@ -1,3 +1,3 @@
 # ThaumicMarginally
-Адаптивный аддон к моду Thaumcraft
+Аддон к моду Thaumcraft 1.7.10
 
